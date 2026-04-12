@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}ホーム{% endblock %}
+
+{% block content %}
+<h2>ホーム画面</h2>
+<p>ログイン画面後の確認用ページ</p>
+
+<form method="POST" action="{{ url_for('auth.logout') }}">
+    <button type="submit">ログアウト</button>
+</form>
+{% endblock %}
