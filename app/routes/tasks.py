@@ -132,6 +132,7 @@ def task_edit(task_id):
 
     return render_template("tasks/edit.html", task=task)
 
+#タスクがあれば、対象のタスクを削除する
 @tasks_bp.route("/tasks/<int:task_id>/delete", methods=["POST"])
 def task_delete(task_id):
     if "user_id" not in session:
@@ -163,4 +164,46 @@ def task_delete(task_id):
     db.commit()
 
     flash("タスクを削除しました。")
+    return redirect(url_for("tasks.task_list"))
+
+#タスクの状態の切り替え
+@tasks_bp.route("/tasks/<int:task_id>/toggle", methods=["POST"])
+def task_toggle(task_id):
+    if "user_id" not in session:
+        flash("ログインしてください")
+        return redirect(url_for("auth.login"))
+
+    db = get_db()
+
+    task = db.execute(
+        """
+        SELECT id, status
+        FROM tasks
+        WHERE id = ? AND user_id = ?
+        """,
+        (task_id, session["user_id"])
+    ).fetchone()
+
+    if task is None:
+        flash("タスクがありません")
+        return redirect(url_for("tasks.task_list"))
+
+    new_status = "Completed" if task["status"] == "Pending" else "Pending"
+
+    db.execute(
+        """
+        UPDATE tasks
+        SET status = ?, updated_at = ?
+        WHERE id = ? AND user_id = ?
+        """,
+        (
+            new_status,
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            task_id,
+            session["user_id"]
+        )
+    )
+    db.commit()
+
+    flash("タスクの状態を変更しました")
     return redirect(url_for("tasks.task_list"))

@@ -31,7 +31,17 @@
                 <td>
                     <a href="{{ url_for('tasks.task_detail', task_id=task.id) }}">詳細へ</a>
                 </td>
-                <td>{{ task.status }}</td>
+                <td>{{ task.status }}
+                    <form method="POST" action="{{ url_for('tasks.task_toggle', task_id=task.id) }}">
+                        <button type="submit">
+                            {% if task.status == "Pending" %}
+                                完了
+                            {% else %}
+                                未完了
+                            {% endif %}
+                        </button>
+                    </form>
+                </td>
                 <td>{{ task.due_date if task.due_date else "未設定" }}</td>
                 <td>{{ task.created_at }}</td>
             </tr>
