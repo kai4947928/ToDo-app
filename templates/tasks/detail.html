@@ -13,9 +13,15 @@
 <p>作成日: {{ task.created_at }}</p>
 <p>更新日: {{ task.updated_at }}</p>
 
-<form method="POST" action="{{ url_for('tasks.task_delete', task_id=task.id)}}">
-    <button type="submit">削除する</button>
-</form>
-<a href="{{ url_for('tasks.task_edit', task_id=task.id) }}">編集</a>
-<a href="{{ url_for('tasks.task_list') }}">一覧へ戻る</a>
+
+
+<div class="actions">
+    <a href="{{ url_for('tasks.task_edit', task_id=task.id) }}">編集</a>
+    <a href="{{ url_for('tasks.task_list') }}">一覧へ戻る</a>
+
+    <form method="POST" action="{{ url_for('tasks.task_delete', task_id=task.id)}}">
+        <button type="submit">削除する</button>
+    </form>
+</div>
+
 {% endblock %}

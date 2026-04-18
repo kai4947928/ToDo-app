@@ -27,12 +27,14 @@
             {% for task in tasks %}
             <tr>
                 <td>{{ task.id }}</td>
-                <td>{{ task.title }}</td>
+                <td class="{{ 'completed' if task.status == 'Completed' else '' }}">
+                    {{ task.title }}
+                </td>
                 <td>
                     <a href="{{ url_for('tasks.task_detail', task_id=task.id) }}">詳細へ</a>
                 </td>
                 <td>{{ task.status }}
-                    <form method="POST" action="{{ url_for('tasks.task_toggle', task_id=task.id) }}">
+                    <form method="POST" action="{{ url_for('tasks.task_toggle', task_id=task.id) }}" style="display:inline;">
                         <button type="submit">
                             {% if task.status == "Pending" %}
                                 完了
@@ -52,7 +54,9 @@
     <p>まだタスクはありません</p>
 {% endif %}
 
-<form method="POST" action="{{ url_for('auth.logout') }}" style="margin-top: 16px;">
-    <button type="submit">ログアウト</button>
-</form>
+<div class="actions">
+    <form method="POST" action="{{ url_for('auth.logout') }}">
+        <button type="submit">ログアウト</button>
+    </form>
+</div>
 {% endblock %}
