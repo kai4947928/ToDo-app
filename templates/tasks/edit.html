@@ -7,18 +7,33 @@
 
 <form method="POST">
     <div>
-        <label>タイトル</label><br>
-        <input type="text" name="title" value="{{ task.title }}">
+        <label for="title">タイトル</label><br>
+        <input type="text" name="title" value="{{ task.title }}" required>
     </div>
 
     <div>
-        <label>期限日</label><br>
-        <input type="date" id="due_date" name="due_date" value="{{ task.due_date if task.due_date else '' }}">
+        <label for="start_date">作業開始日</label><br>
+        <input type="date" id="start_date" name="start_date" value="{{ task.start_date or '' }}">
     </div>
 
     <div>
-        <label>詳細</label><br>
-        <textarea name="description">{{ task.description if task.description else '' }}</textarea>
+        <label for="end_date">目標終了日</label><br>
+        <input type="date" id="end_date" name="end_date" value="{{ task.end_date or '' }}">
+    </div>
+
+    <div>
+        <label for="start_time">作業開始時間</label><br>
+        <input type="time" id="start_time" name="start_time" value="{{ task.start_time or '' }}">
+    </div>
+
+    <div>
+        <label for="end_time">目標終了時間</label><br>
+        <input type="time" id="end_time" name="end_time" value="{{ task.end_time or '' }}">
+    </div>
+
+    <div>
+        <label for="description">詳細</label><br>
+        <textarea id="description" name="description">{{ task.description or '' }}</textarea>
     </div>
 
     <button type="submit">更新する</button>

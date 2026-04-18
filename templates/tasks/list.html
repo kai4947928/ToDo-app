@@ -19,15 +19,17 @@
                 <th>タイトル</th>
                 <th>詳細</th>
                 <th>状態</th>
-                <th>期限日</th>
-                <th>作成日時</th>
+                <th>作業開始日</th>
+                <th>目標終了日</th>
+                <th>作業開始時間</th>
+                <th>目標終了時間</th>
             </tr>
         </thead>
         <tbody>
             {% for task in tasks %}
             <tr>
                 <td>{{ task.id }}</td>
-                <td class="{{ 'completed' if task.status == 'Completed' else '' }}">
+                <td class="{{ 'completed' if task.status == 'completed' else '' }}">
                     {{ task.title }}
                 </td>
                 <td>
@@ -36,7 +38,7 @@
                 <td>{{ task.status }}
                     <form method="POST" action="{{ url_for('tasks.task_toggle', task_id=task.id) }}" style="display:inline;">
                         <button type="submit">
-                            {% if task.status == "Pending" %}
+                            {% if task.status == "pending" %}
                                 完了
                             {% else %}
                                 未完了
@@ -44,8 +46,10 @@
                         </button>
                     </form>
                 </td>
-                <td>{{ task.due_date if task.due_date else "未設定" }}</td>
-                <td>{{ task.created_at }}</td>
+                <td>{{ task.start_date if task.start_date else "未設定" }}</td>
+                <td>{{ task.end_date if task.end_date else "未設定" }}</td>
+                <td>{{ task.start_time if task.end_time else "未設定" }}</td>
+                <td>{{ task.end_time if task.end_time else "未設定" }}</td>
             </tr>
             {% endfor %}
         </tbody>

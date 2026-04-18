@@ -21,7 +21,7 @@ def task_list():
     db = get_db()
     tasks = db.execute(
         """
-        SELECT id, title, description, due_date, status, created_at, updated_at
+        SELECT id, title, description, start_date, end_date, start_time, end_time, status, created_at, updated_at
         FROM tasks
         WHERE user_id = ?
         ORDER BY id DESC
@@ -39,9 +39,12 @@ def task_create():
         return redirect(url_for("auth.login"))
 
     if request.method == "POST":
-        title = request.form.get("title").strip()
-        description = request.form.get("description").strip()
-        due_date = request.form.get("due_date", "").strip()
+        title = request.form.get("title", "").strip()
+        description = request.form.get("description", "").strip()
+        start_date = request.form.get("start_date", "")
+        end_date = request.form.get("end_date", "")
+        start_time = request.form.get("start_time", "")
+        end_time = request.form.get("end_time", "")
 
         if not title:
             flash("タイトルは必須です。")
@@ -52,10 +55,10 @@ def task_create():
         db = get_db()
         db.execute(
             """
-            INSERT INTO tasks (user_id, title, description, due_date, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO tasks (user_id, title, description, start_date, end_date, start_time, end_time, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            (session["user_id"], title, description, due_date, now, now)
+            (session["user_id"], title, description, start_date, end_date, start_time, end_time, now, now)
         )
         db.commit()
 
@@ -74,7 +77,7 @@ def task_detail(task_id):
     db = get_db()
     task = db.execute(
         """
-        SELECT id, user_id, title, description, due_date, status, created_at, updated_at
+        SELECT id, user_id, title, description, start_date, end_date, start_time, end_time, status, created_at, updated_at
         FROM tasks
         WHERE id = ? AND user_id = ?
         """,
@@ -97,7 +100,7 @@ def task_edit(task_id):
     db = get_db()
     task = db.execute(
         """
-        SELECT id, user_id, title, description, due_date, status, created_at, updated_at
+        SELECT id, user_id, title, description, start_date, end_date, start_time, end_time, status, created_at, updated_at
         FROM tasks
         WHERE id = ? AND user_id = ?
         """,
@@ -111,21 +114,24 @@ def task_edit(task_id):
     if request.method == "POST":
         title = request.form.get("title", "").strip()
         description = request.form.get("description", "").strip()
-        due_date = request.form.get("due_date", "").strip()
+        start_date = request.form.get("start_date", "")
+        end_date = request.form.get("end_date", "")
+        start_time = request.form.get("start_time", "")
+        end_time = request.form.get("end_time", "")
 
         if not title:
             flash("タイトルは必須です。")
-            return render_template("task/edit.html", task=task)
+            return render_template("tasks/edit.html", task=task)
 
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         db.execute(
             """
             UPDATE tasks
-            SET title = ?, description = ?, due_date = ?, updated_at = ?
+            SET title = ?, description = ?, start_date = ?, end_date = ?, start_time = ?, end_time = ?, updated_at = ?
             WHERE id = ? AND user_id = ?
             """,
-            (title, description, due_date, now, task_id, session["user_id"])
+            (title, description, start_date, end_date, start_time, end_time, now, task_id, session["user_id"])
         )
         db.commit()
 
@@ -190,7 +196,7 @@ def task_toggle(task_id):
         flash("タスクがありません")
         return redirect(url_for("tasks.task_list"))
 
-    new_status = "Completed" if task["status"] == "Pending" else "Pending"
+    new_status = "completed" if task["status"] == "pending" else "pending"
 
     db.execute(
         """

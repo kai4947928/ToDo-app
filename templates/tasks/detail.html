@@ -9,7 +9,10 @@
 <p>タイトル: {{ task.title }}</p>
 <p>詳細: {{ task.description if task.description else "未入力" }}</p>
 <p>状態: {{ task.status }}</p>
-<p>期限日: {{ task.due_date if task.due_date else "未設定" }}</p>
+<p>作業開始日: {{ task.start_date if task.start_date else "未設定" }}</p>
+<p>目標終了日: {{ task.end_date if task.end_date else "未設定" }}</p>
+<p>作業開始時間: {{ task.start_time if task.start_time else "未設定" }}</p>
+<p>目標終了時間: {{ task.end_time if task.end_time else "未設定" }}</p>
 <p>作成日: {{ task.created_at }}</p>
 <p>更新日: {{ task.updated_at }}</p>
 

@@ -35,7 +35,10 @@ def init_db():
         user_id INTEGER NOT NULL,
         title TEXT NOT NULL,
         description TEXT,
-        due_date TEXT,
+        start_date TEXT,
+        end_date TEXT,
+        start_time TEXT,
+        end_time TEXT,
         status TEXT NOT NULL DEFAULT 'pending',
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL
