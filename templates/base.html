@@ -3,20 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}ToDo{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
 </head>
 <body>
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% endwith %}
+<header class="header">
+    <h1>ToDoアプリ</h1>
+</header>
 
-{% block content %}{% endblock %}
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</div>
 
 </body>
 </html>

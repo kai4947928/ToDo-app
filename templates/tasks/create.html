@@ -19,5 +19,7 @@
     <button type="submit">作成</button>
 </form>
 
-<a href="{{ url_for('tasks.task_list') }}">一覧へ戻る</a>
+<div class="actions">
+    <a href="{{ url_for('tasks.task_list') }}">一覧へ戻る</a>
+</div>
 {% endblock %}
