@@ -41,6 +41,7 @@ def task_create():
     if request.method == "POST":
         title = request.form.get("title").strip()
         description = request.form.get("description").strip()
+        due_date = request.form.get("due_date", "").strip()
 
         if not title:
             flash("タイトルは必須です。")
@@ -51,10 +52,10 @@ def task_create():
         db = get_db()
         db.execute(
             """
-            INSERT INTO tasks (user_id, title, description, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO tasks (user_id, title, description, due_date, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
-            (session["user_id"], title, description, now, now)
+            (session["user_id"], title, description, due_date, now, now)
         )
         db.commit()
 
@@ -110,6 +111,7 @@ def task_edit(task_id):
     if request.method == "POST":
         title = request.form.get("title", "").strip()
         description = request.form.get("description", "").strip()
+        due_date = request.form.get("due_date", "").strip()
 
         if not title:
             flash("タイトルは必須です。")
@@ -120,10 +122,10 @@ def task_edit(task_id):
         db.execute(
             """
             UPDATE tasks
-            SET title = ?, description = ?, updated_at = ?
+            SET title = ?, description = ?, due_date = ?, updated_at = ?
             WHERE id = ? AND user_id = ?
             """,
-            (title, description, now, task_id, session["user_id"])
+            (title, description, due_date, now, task_id, session["user_id"])
         )
         db.commit()
 

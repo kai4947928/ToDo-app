@@ -6,15 +6,20 @@
 <h2>タスク編集</h2>
 
 <form method="POST">
-    <p>
+    <div>
         <label>タイトル</label><br>
         <input type="text" name="title" value="{{ task.title }}">
-    </p>
+    </div>
 
-    <p>
+    <div>
+        <label>期限日</label><br>
+        <input type="date" id="due_date" name="due_date" value="{{ task.due_date if task.due_date else '' }}">
+    </div>
+
+    <div>
         <label>詳細</label><br>
-        <textarea name="description">{{ task.description if task.description else "" }}</textarea>
-    </p>
+        <textarea name="description">{{ task.description if task.description else '' }}</textarea>
+    </div>
 
     <button type="submit">更新する</button>
 </form>
