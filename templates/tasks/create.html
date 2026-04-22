@@ -8,32 +8,32 @@
 <form method="POST">
     <div>
         <label for="title">タイトル</label><br>
-        <input type="text" id="title" name="title" required>
+        <input type="text" id="title" name="title" value="{{ request.form.get('title', '') }}" required>
     </div>
 
     <div>
         <label for="start_date">作業開始日</label><br>
-        <input type="date" id="start_date" name="start_date">
+        <input type="date" id="start_date" name="start_date" value="{{ request.form.get('start_date', '') }}">
     </div>
 
     <div>
         <label for="end_date">目標終了日</label><br>
-        <input type="date" id="end_date" name="end_date">
+        <input type="date" id="end_date" name="end_date" value="{{ request.form.get('end_date', '') }}">
     </div>
 
     <div>
         <label for="start_time">作業開始時間</label><br>
-        <input type="time" id="start_time" name="start_time">
+        <input type="time" id="start_time" name="start_time" value="{{ request.form.get('start_time', '') }}">
     </div>
 
     <div>
         <label for="end_time">目標終了時間</label><br>
-        <input type="time" id="end_time" name="end_time">
+        <input type="time" id="end_time" name="end_time" value="{{ request.form.get('end_time', '') }}">
     </div>
 
     <div>
         <label for="description">詳細</label><br>
-        <textarea name="description" id="description"></textarea>
+        <textarea name="description" id="description">{{ request.form.get('description', '') }}</textarea>
     </div>
 
     <button type="submit">作成</button>

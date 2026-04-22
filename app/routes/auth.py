@@ -19,11 +19,11 @@ def login():
         ).fetchone()
 
         if user is None:
-            flash("メールアドレスまたはパスワードが正しくありません")
+            flash("メールアドレスまたはパスワードが正しくありません", "error")
             return render_template("auth/login.html")
 
         if not check_password_hash(user["password_hash"], password):
-            flash("メールアドレスまたはパスワードが正しくありません")
+            flash("メールアドレスまたはパスワードが正しくありません", "error")
             return render_template("auth/login.html")
 
         session.clear()
@@ -86,7 +86,7 @@ def register():
         )
         db.commit()
 
-        flash("登録が完了しました。ログインしてください。")
+        flash("登録が完了しました。ログインしてください。", "error")
         return redirect(url_for("auth.login"))
 
     return render_template("auth/register.html")
@@ -94,5 +94,5 @@ def register():
 @auth_bp.route("/logout", methods=["POST"])
 def logout():
     session.clear()
-    flash("ログアウトしました。")
+    flash("ログアウトしました。", "success")
     return redirect(url_for("auth.login"))

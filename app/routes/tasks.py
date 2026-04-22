@@ -15,7 +15,7 @@ def home():
 @tasks_bp.route("/tasks")
 def task_list():
     if "user_id" not in session:
-        flash("ログインが必要です。")
+        flash("ログインが必要です。", "error")
         return redirect(url_for("auth.login"))
 
     db = get_db()
@@ -35,7 +35,7 @@ def task_list():
 @tasks_bp.route("/tasks/create", methods=["GET", "POST"])
 def task_create():
     if "user_id" not in session:
-        flash("ログインが必要です。")
+        flash("ログインが必要です。", "error")
         return redirect(url_for("auth.login"))
 
     if request.method == "POST":
@@ -46,8 +46,16 @@ def task_create():
         start_time = request.form.get("start_time", "")
         end_time = request.form.get("end_time", "")
 
+        if start_date and end_date and start_date > end_date:
+            flash("開始日は終了日以前にしてください。", "error")
+            return render_template("tasks/create.html")
+
+        if start_date == end_date and start_time and end_time:
+            flash("開始時間は終了時間以前にしてください。", "error")
+            return render_template("tasks/create.html")
+
         if not title:
-            flash("タイトルは必須です。")
+            flash("タイトルは必須です。", "error")
             return render_template("tasks/create.html")
 
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -62,7 +70,7 @@ def task_create():
         )
         db.commit()
 
-        flash("タスクを作成しました。")
+        flash("タスクを作成しました。", "success")
         return redirect(url_for("tasks.task_list"))
 
     return render_template("tasks/create.html")
@@ -71,7 +79,7 @@ def task_create():
 @tasks_bp.route("/tasks/<int:task_id>")
 def task_detail(task_id):
     if "user_id" not in session:
-        flash("ログインしてください")
+        flash("ログインしてください", "error")
         return redirect(url_for("auth.login"))
 
     db = get_db()
@@ -85,7 +93,7 @@ def task_detail(task_id):
     ).fetchone()
 
     if task is None:
-        flash("タスクが見つかりません")
+        flash("タスクが見つかりません", "error")
         return redirect(url_for("tasks.task_list"))
 
     return render_template("tasks/detail.html", task=task)
@@ -94,7 +102,7 @@ def task_detail(task_id):
 @tasks_bp.route("/tasks/<int:task_id>/edit", methods=["GET", "POST"])
 def task_edit(task_id):
     if "user_id" not in session:
-        flash("ログインしてください")
+        flash("ログインしてください", "error")
         return redirect(url_for("auth.login"))
 
     db = get_db()
@@ -108,7 +116,7 @@ def task_edit(task_id):
     ).fetchone()
 
     if task is None:
-        flash("タスクが見つかりません")
+        flash("タスクが見つかりません", "error")
         return redirect(url_for("tasks.task_list"))
 
     if request.method == "POST":
@@ -119,8 +127,16 @@ def task_edit(task_id):
         start_time = request.form.get("start_time", "")
         end_time = request.form.get("end_time", "")
 
+        if start_date and end_date and start_date > end_date:
+            flash("開始日は終了日以前にしてください。", "error")
+            return render_template("tasks/create.html")
+
+        if start_date == end_date and start_time and end_time:
+            flash("開始時間は終了時間以前にしてください。", "error")
+            return render_template("tasks/create.html")
+
         if not title:
-            flash("タイトルは必須です。")
+            flash("タイトルは必須です。", "error")
             return render_template("tasks/edit.html", task=task)
 
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -135,7 +151,7 @@ def task_edit(task_id):
         )
         db.commit()
 
-        flash("タスクを更新しました。")
+        flash("タスクを更新しました。", "success")
         return redirect(url_for("tasks.task_detail", task_id=task_id))
 
     return render_template("tasks/edit.html", task=task)
@@ -144,7 +160,7 @@ def task_edit(task_id):
 @tasks_bp.route("/tasks/<int:task_id>/delete", methods=["POST"])
 def task_delete(task_id):
     if "user_id" not in session:
-        flash("ログインしてください")
+        flash("ログインしてください", "error")
         return redirect(url_for("auth.login"))
 
     db = get_db()
@@ -159,7 +175,7 @@ def task_delete(task_id):
     ).fetchone()
 
     if task is None:
-        flash("タスクがありません")
+        flash("タスクがありません", "error")
         return redirect(url_for("tasks.task_list"))
 
     db.execute(
@@ -171,14 +187,14 @@ def task_delete(task_id):
     )
     db.commit()
 
-    flash("タスクを削除しました。")
+    flash("タスクを削除しました。", "success")
     return redirect(url_for("tasks.task_list"))
 
 #タスクの状態の切り替え
 @tasks_bp.route("/tasks/<int:task_id>/toggle", methods=["POST"])
 def task_toggle(task_id):
     if "user_id" not in session:
-        flash("ログインしてください")
+        flash("ログインしてください", "error")
         return redirect(url_for("auth.login"))
 
     db = get_db()
@@ -193,7 +209,7 @@ def task_toggle(task_id):
     ).fetchone()
 
     if task is None:
-        flash("タスクがありません")
+        flash("タスクがありません", "error")
         return redirect(url_for("tasks.task_list"))
 
     new_status = "completed" if task["status"] == "pending" else "pending"
@@ -213,5 +229,5 @@ def task_toggle(task_id):
     )
     db.commit()
 
-    flash("タスクの状態を変更しました")
+    flash("タスクの状態を変更しました", "success")
     return redirect(url_for("tasks.task_list"))

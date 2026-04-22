@@ -28,6 +28,18 @@ body {
     border-radius: 5px;
 }
 
+.flash.error {
+    background-color: #ffe6e6;
+    border: 1px solid #ff4d4d;
+    color: #cc0000;
+}
+
+.flash.success {
+    background-color: #e6ffed;
+    border: 1px solid #2ecc71;
+    color: #27ae60;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
